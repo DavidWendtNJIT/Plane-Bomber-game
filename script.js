@@ -16,6 +16,7 @@ let keys = {
 };
 
 function start(){
+  gameMessage.classList.add("hide");
   player.inplay = true;
   player.plane = document.createElement("div");
   player.plane.setAttribute("class","plane");
