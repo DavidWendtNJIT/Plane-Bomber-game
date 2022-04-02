@@ -7,58 +7,69 @@ document.addEventListener("keyup", pressOff);
 document.addEventListener("click", start);
 
 let player = {
-  score:0,
-  speed:2,
-  inplay:false
+  score: 0,
+  speed: 3,
+  inplay: false,
 };
 let keys = {
   space: false,
 };
 
-function start(){
+function start() {
   gameMessage.classList.add("hide");
   player.inplay = true;
+  player.score = 5000;
   player.plane = document.createElement("div");
-  player.plane.setAttribute("class","plane");
+  player.plane.setAttribute("class", "plane");
   gameArea.appendChild(player.plane);
   window.requestAnimationFrame(playGame);
   player.x = player.plane.offsetLeft;
   player.y = player.plane.offsetTop;
 }
 
-function playGame(){
-  if(player.inplay){
-  console.log(keys)
-  if(keys.ArrowUp){
-    player.y -= player.speed;
-  }
-  if (keys.ArrowDown) {
-    player.y += player.speed;
-  }
-  if (keys.ArrowLeft) {
-    player.x -= player.speed;
-  }
-  if (keys.ArrowRight) {
-    player.x += player.speed;
-  }
+function playGame() {
+  if (player.inplay) {
+    console.log(keys);
+    if (keys.ArrowUp && player.y > 0) {
+      player.y -= player.speed;
+    }
+    if (keys.ArrowDown && player.y < 300) {
+      player.y += player.speed;
+    }
+    if (keys.ArrowLeft && player.x > 0) {
+      player.x -= player.speed;
+    }
+    if (keys.ArrowRight && player.x < gameArea.offsetWidth - 275) {
+      player.x += player.speed;
+    }
 
-  player.plane.style.left = player.x + "px";
-  player.plane.style.top = player.y + "px";
-  window.requestAnimationFrame(playGame);
+    player.x += player.speed * 2;
+    if (player.x > gameArea.offsetWidth) {
+      player.x = 0;
+      player.score -= 100;
+    }
+    
+    player.score--;
+    if(player.score < 0 ){
+      player.score = 0;
+    }
+    player.plane.style.left = player.x + "px";
+    player.plane.style.top = player.y + "px";
+    window.requestAnimationFrame(playGame);
   }
 }
 
 // Key Stroke Functions
 function pressOn(e) {
   e.preventDefault();
-  let tempKey = (e.key == " ") ? "space" : e.key;
+  let tempKey = e.key == " " ? "space" : e.key;
   keys[tempKey] = true;
   console.log(keys);
 }
 
 function pressOff(e) {
   e.preventDefault();
-  let tempKey = (e.key == " ") ? "space" : e.key;
+  let tempKey = e.key == " " ? "space" : e.key;
   keys[tempKey] = false;
   console.log(keys);
 }
