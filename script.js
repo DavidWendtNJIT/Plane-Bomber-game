@@ -25,6 +25,9 @@ function start() {
     gameMessage.classList.add("hide"); // Hides the Start Button
     player.inplay = true;
     player.score = 5000; // Starting Score
+    player.totalBombs = 2;
+    player.ready = true;
+    player.activeBomb = 0; // sets the starting value of the numbers on the bombs
     player.plane = document.createElement("div"); // Dynamically creates the Plane once Start is clicked
     player.plane.setAttribute("class", "plane");
     gameArea.appendChild(player.plane);
@@ -38,22 +41,36 @@ function makeTarget() {
   player.target = document.createElement("div"); // Creates the Target
   player.target.setAttribute("class", "target");
   player.target.style.width = Math.floor(Math.random() * 250) + 10 + "px"; // Sets the width at random with a minimum of 10px
-  player.target.style.height = Math.floor(Math.random()*100)+250+"px"; // Sets the height at random with a minimum of 250px
-  player.target.style.left = Math.floor(Math.random() * (gameArea.offsetWidth - 200)) + 100 + "px"; // Sets the horizontal position at random within 100px of the edge of the game area
+  player.target.style.height = Math.floor(Math.random() * 100) + 250 + "px"; // Sets the height at random with a minimum of 250px
+  player.target.style.left =
+    Math.floor(Math.random() * (gameArea.offsetWidth - 200)) + 100 + "px"; // Sets the horizontal position at random within 100px of the edge of the game area
   gameArea.appendChild(player.target);
 }
 
-function makeBomb(){
+function makeBomb() {
   console.log("bomb");
-  if(player.inplay){
-
+  if (player.ready) {
+    player.score -= 300; // drops the score for every bomb
+    player.activeBomb++;
+    let bomb = document.createElement("div"); // creates the bomb
+    bomb.classList.add("bomb");
+    bomb.innerHTML = player.activeBomb;
+    bomb.y = player.y; // sets the position of the bomb to the position of the plane
+    bomb.x = player.x; // sets the position of the bomb to the position of the plane
+    bomb.style.left = bomb.x + "px";
+    bomb.style.top = bomb.y + "px";
+    gameArea.appendChild(bomb);
+    player.ready = false;
+    setTimeout(function(){
+      player.ready = true;  // 0.5 seconds between bomb drops
+    },500);
   }
 }
 
 function playGame() {
   if (player.inplay) {
-
-    if(keys.space){ // Creates a bomb once Space is pressed
+    if (keys.space) {
+      // Creates a bomb once Space is pressed
       makeBomb();
     }
 
@@ -78,7 +95,7 @@ function playGame() {
     }
 
     player.score--;
-    if (player.score < 0) {
+    if (player.score < 0) { // score can't go into negative numbers
       player.score = 0;
     }
     player.plane.style.left = player.x + "px";
