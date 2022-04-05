@@ -61,14 +61,28 @@ function makeBomb() {
     bomb.style.top = bomb.y + "px";
     gameArea.appendChild(bomb);
     player.ready = false;
-    setTimeout(function(){
-      player.ready = true;  // 0.5 seconds between bomb drops
-    },500);
+    setTimeout(function () {
+      player.ready = true; // 0.5 seconds between bomb drops
+    }, 350);
   }
+}
+
+function moveBomb() {
+  let bombs = document.querySelectorAll(".bomb"); // selecting ALL bombs that drop
+  bombs.forEach(function (item) {
+    // selecting each bomb
+    item.y += 5;
+    item.style.top = item.y + "px";
+    if(item.y > 1200){
+      player.activeBomb--;
+      item.parentElement.removeChild(item);
+    }
+  });
 }
 
 function playGame() {
   if (player.inplay) {
+    moveBomb();
     if (keys.space) {
       // Creates a bomb once Space is pressed
       makeBomb();
@@ -95,7 +109,8 @@ function playGame() {
     }
 
     player.score--;
-    if (player.score < 0) { // score can't go into negative numbers
+    if (player.score < 0) {
+      // score can't go into negative numbers
       player.score = 0;
     }
     player.plane.style.left = player.x + "px";
