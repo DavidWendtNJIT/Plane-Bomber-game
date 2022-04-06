@@ -1,4 +1,4 @@
-// Use HTML elements for JS functionality
+// Using HTML elements for JS functionality
 const score = document.querySelector(".score");
 const gameArea = document.querySelector(".gameArea");
 const gameMessage = document.querySelector(".gameMessage");
@@ -8,6 +8,8 @@ document.addEventListener("keydown", pressOn);
 document.addEventListener("keyup", pressOff);
 document.addEventListener("click", start);
 
+
+// Global objects
 let player = {
   score: 0,
   speed: 3,
@@ -18,6 +20,7 @@ let keys = {
   space: false,
 };
 
+
 // Function for when the game starts and some default values
 function start() {
   if (!player.inplay) {
@@ -26,6 +29,7 @@ function start() {
     player.inplay = true;
     player.score = 5000; // Starting Score
     player.totalBombs = 2;
+    player.bombNum = 0;
     player.ready = true;
     player.activeBomb = 0; // sets the starting value of the numbers on the bombs
     player.plane = document.createElement("div"); // Dynamically creates the Plane once Start is clicked
@@ -51,14 +55,15 @@ function makeBomb() {
   console.log("bomb");
   if (player.ready) {
     player.score -= 300; // drops the score for every bomb
-    player.activeBomb++;
+    player.activeBomb++; // numbers each bomb
+    player.bombNum++;
     let bomb = document.createElement("div"); // creates the bomb
     bomb.classList.add("bomb");
-    bomb.innerHTML = player.activeBomb;
+    // bomb.innerHTML = player.bombNum;
     bomb.y = player.y; // sets the position of the bomb to the position of the plane
     bomb.x = player.x; // sets the position of the bomb to the position of the plane
-    bomb.style.left = bomb.x + "px";
-    bomb.style.top = bomb.y + "px";
+    bomb.style.left = bomb.x + 175 + "px"; //adjusts the position of the bomb relative to the plane
+    bomb.style.top = bomb.y + 50 + "px"; //adjusts the position of the bomb relative to the plane
     gameArea.appendChild(bomb);
     player.ready = false;
     setTimeout(function () {
@@ -67,17 +72,36 @@ function makeBomb() {
   }
 }
 
+// Dropping the bombs
 function moveBomb() {
   let bombs = document.querySelectorAll(".bomb"); // selecting ALL bombs that drop
   bombs.forEach(function (item) {
     // selecting each bomb
-    item.y += 5;
-    item.style.top = item.y + "px";
-    if(item.y > 1200){
+    item.y += 5; // bombs drop 
+    item.style.top = item.y + 50 + "px"; //adjusts where the bomb drops from the plane
+    if(item.y > 1200){ // bomb dissappears after reaching 1200 pxs
       player.activeBomb--;
-      item.parentElement.removeChild(item);
+      item.parentElement.removeChild(item); // bomb disappears
+    }
+    if(bombHit(item,player.target)){
+      player.score += 1000; // score increased when target is hit
+      player.target.parentElement.removeChild(player.target); // target disappears when hit
+      item.parentElement.removeChild(item); // bomb disappears when hitting base
+      makeTarget();
     }
   });
+}
+
+function bombHit(a,b){
+  let aRect = a.getBoundingClientRect();
+  let bRect = b.getBoundingClientRect();
+  return !(
+    (aRect.bottom < bRect.top) ||
+    (aRect.top > bRect.bottom) ||
+    (aRect.right < bRect.left) ||
+    (aRect.left > bRect.right)
+
+  )
 }
 
 function playGame() {
