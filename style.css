@@ -15,8 +15,8 @@
 .gameMessage {
   position: absolute;
   top: 10%;
-  left: 35%;
-  width: 30%;
+  left: 30%;
+  width: 40%;
   text-align: center;
   background-color: black;
   color: white;
@@ -33,12 +33,13 @@
 .score {
   background-color: #79C9F9;
   height: 70px;
-  text-align: center;
+  left: 200px;
   color: black;
   font-size: 3em;
   font-weight: 500;
   font-family: 'Courier New', Courier, monospace;
 }
+
 
 .target {
   position: absolute;
@@ -51,6 +52,14 @@
   font-size: 1.5em;
 }
 
+
+.level {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 3em;
+  font-family: 'Courier New', Courier, monospace;
+}
 .bomb {
   position: absolute;
   left: 0px;

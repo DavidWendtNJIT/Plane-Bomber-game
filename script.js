@@ -2,6 +2,7 @@
 const score = document.querySelector(".score");
 const gameArea = document.querySelector(".gameArea");
 const gameMessage = document.querySelector(".gameMessage");
+const level = document.querySelector(".level");
 
 // Functionality
 document.addEventListener("keydown", pressOn);
@@ -20,17 +21,22 @@ let keys = {
 };
 
 let playHit = document.getElementById("playHit");
-playHit.volume = 0.1;
+playHit.volume = 0.2;
 
 let planeAudio = document.getElementById("plane-sound");
-planeAudio.volume = 0.5;
+planeAudio.volume = 0.4;
 planeAudio.loop = true;
+
+let backgroundAudio = document.getElementById("background-audio");
+backgroundAudio.volume = 0.6;
+backgroundAudio.loop = true;
 
 // Function for when the game starts and some default values
 function start() {
   if (!player.inplay) {
-    gameArea.innerHTML = "";
-    player.level = 3;
+    gameArea.innerHTML = ""; // Clears the game area when restarting
+    player.level = 11;
+    playBackgroundAudio();
     playPlaneAudio();
     makeTarget();
     gameMessage.classList.add("hide"); // Hides the Start Button
@@ -57,7 +63,7 @@ function endGame() {
 
 function makeTarget() {
   player.level--;
-  if (player.level < 0) {
+  if (player.level < 1) {
     endGame(); // End game when
   } else {
     player.target = document.createElement("div"); // Creates the Target
@@ -100,6 +106,10 @@ function playPlaneAudio() {
 
 function pausePlaneAudio() {
   planeAudio.pause();
+}
+
+function playBackgroundAudio(){
+  backgroundAudio.play();
 }
 
 // Dropping the bombs
@@ -174,6 +184,7 @@ function playGame() {
     player.plane.style.top = player.y + "px";
     window.requestAnimationFrame(playGame);
     score.innerHTML = "Score: " + player.score;
+    level.innerHTML = "Remaining Levels: " + player.level;
   }
 }
 
