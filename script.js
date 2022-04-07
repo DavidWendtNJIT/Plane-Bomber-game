@@ -19,11 +19,19 @@ let keys = {
   space: false,
 };
 
+let playHit = document.getElementById("playHit");
+playHit.volume = 0.1;
+
+let planeAudio = document.getElementById("plane-sound");
+planeAudio.volume = 0.5;
+planeAudio.loop = true;
+
 // Function for when the game starts and some default values
 function start() {
   if (!player.inplay) {
     gameArea.innerHTML = "";
-    player.level = 1;
+    player.level = 3;
+    playPlaneAudio();
     makeTarget();
     gameMessage.classList.add("hide"); // Hides the Start Button
     player.inplay = true;
@@ -41,16 +49,16 @@ function start() {
   }
 }
 
-function endGame(){
+function endGame() {
+  pausePlaneAudio();
   player.inplay = false;
   gameMessage.classList.remove("hide");
-  gameArea
 }
 
 function makeTarget() {
   player.level--;
-  if ((player.level < 0)) {
-    endGame(); // End game when 
+  if (player.level < 0) {
+    endGame(); // End game when
   } else {
     player.target = document.createElement("div"); // Creates the Target
     player.target.setAttribute("class", "target");
@@ -63,7 +71,7 @@ function makeTarget() {
 }
 
 function makeBomb() {
-  if (player.ready && (player.activeBomb < player.totalBombs)) {
+  if (player.ready && player.activeBomb < player.totalBombs) {
     player.score -= 200; // drops the score for every bomb
     player.activeBomb++; // numbers each bomb
     player.bombScore++;
@@ -82,6 +90,18 @@ function makeBomb() {
   }
 }
 
+function playAudioHit() {
+  playHit.play();
+}
+
+function playPlaneAudio() {
+  planeAudio.play();
+}
+
+function pausePlaneAudio() {
+  planeAudio.pause();
+}
+
 // Dropping the bombs
 function moveBomb() {
   let bombs = document.querySelectorAll(".bomb"); // selecting ALL bombs that drop
@@ -95,6 +115,7 @@ function moveBomb() {
       item.parentElement.removeChild(item); // bomb disappears
     }
     if (bombHit(item, player.target)) {
+      playAudioHit();
       player.score += 1000; // score increased when target is hit
       player.activeBomb--;
       player.target.parentElement.removeChild(player.target); // target disappears when hit
@@ -115,11 +136,6 @@ function bombHit(a, b) {
     aRect.left > bRect.right
   );
 }
-
-// function playHit() {
-//   let audio = new Audio("assets/bomb-hit.wav");
-//   audio.playHit();
-// }
 
 function playGame() {
   if (player.inplay) {
