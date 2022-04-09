@@ -3,6 +3,7 @@ const score = document.querySelector(".score");
 const gameArea = document.querySelector(".gameArea");
 const gameMessage = document.querySelector(".gameMessage");
 const level = document.querySelector(".level");
+const song = document.querySelector("#background-audio");
 
 // Functionality
 document.addEventListener("keydown", pressOn);
@@ -20,6 +21,7 @@ let keys = {
   space: false,
 };
 
+// Audio
 let playHit = document.getElementById("playHit");
 playHit.volume = 0.2;
 
@@ -43,13 +45,16 @@ function start() {
     player.inplay = true;
     player.score = 4000; // Starting Score
     player.totalBombs = 6; // total bombs allowed on screen
-    player.bombScore = 0;
+    // player.bombScore = 0;
     player.ready = true;
     player.activeBomb = 0; // sets the starting value of the numbers on the bombs
     player.plane = document.createElement("div"); // Dynamically creates the Plane once Start is clicked
     player.plane.setAttribute("class", "plane");
     gameArea.appendChild(player.plane); // places plane in game area
-    window.requestAnimationFrame(playGame);
+    // player.button = document.createElement("button");
+    // player.button.setAttribute("class", "end-game");
+    // gameArea.appendChild(player.button);
+    window.requestAnimationFrame(playGame); //requests animation with the function playGame passed into it
     player.x = player.plane.offsetLeft;
     player.y = player.plane.offsetTop;
   }
@@ -58,13 +63,13 @@ function start() {
 function endGame() {
   pausePlaneAudio();
   player.inplay = false;
-  gameMessage.classList.remove("hide");
+  gameMessage.classList.remove("hide"); // removing the "hide" class to SHOW the start button
 }
 
 function makeTarget() {
   player.level--;
   if (player.level < 1) {
-    endGame(); // End game when
+    endGame(); // End game when there are no more levels
   } else {
     player.target = document.createElement("div"); // Creates the Target
     player.target.setAttribute("class", "target");
@@ -108,7 +113,7 @@ function pausePlaneAudio() {
   planeAudio.pause();
 }
 
-function playBackgroundAudio(){
+function playBackgroundAudio() {
   backgroundAudio.play();
 }
 
@@ -117,9 +122,9 @@ function moveBomb() {
   let bombs = document.querySelectorAll(".bomb"); // selecting ALL bombs that drop
   bombs.forEach(function (item) {
     // selecting each bomb
-    item.y += 5; // bombs drop
+    item.y += 5; // bombs dropped
     item.style.top = item.y + 50 + "px"; //adjusts where the bomb drops from the plane
-    if (item.y > 1000) {
+    if (item.y > window.innerHeight - 100) {
       // bomb dissappears after reaching 1000 pxs
       player.activeBomb--;
       item.parentElement.removeChild(item); // bomb disappears
@@ -149,17 +154,17 @@ function bombHit(a, b) {
 
 function playGame() {
   if (player.inplay) {
+    //main if statement of playGame
     moveBomb();
     if (keys.space) {
-      // Creates a bomb once Space is pressed
-      makeBomb();
+      makeBomb(); // Creates a bomb once Space is pressed
     }
 
     // Controls of Plane from keyboard arrows, and sets boundaries
-    if (keys.ArrowUp && player.y > 0) {
+    if (keys.ArrowUp && player.y > 125) {
       player.y -= player.speed;
     }
-    if (keys.ArrowDown && player.y < 400) {
+    if (keys.ArrowDown && player.y < 350) {
       player.y += player.speed;
     }
     if (keys.ArrowLeft && player.x > 0) {
@@ -169,10 +174,10 @@ function playGame() {
       player.x += player.speed;
     }
 
-    player.x += player.speed * 2;
+    player.x += player.speed * 2; // sets the plane speed
     if (player.x > gameArea.offsetWidth) {
-      player.x = 0;
-      player.score -= 100;
+      player.x = -200; // resets the plane back to -200 of the start to keep it looping on the screen
+      player.score -= 50; // score drops as the plane moves
     }
 
     player.score--;
@@ -180,11 +185,12 @@ function playGame() {
       // score can't go into negative numbers
       player.score = 0;
     }
-    player.plane.style.left = player.x + "px";
-    player.plane.style.top = player.y + "px";
-    window.requestAnimationFrame(playGame);
+    player.plane.style.left = player.x + "px"; //updating the plane movement using the player.x values
+    player.plane.style.top = player.y + "px"; //updating the plane movement using the player.y values
+    window.requestAnimationFrame(playGame); //reinitiated the animation to have it loop through the playGame function
     score.innerHTML = "Score: " + player.score;
     level.innerHTML = "Remaining Levels: " + player.level;
+    song.style.visibility = "visible";
   }
 }
 
@@ -193,12 +199,10 @@ function pressOn(e) {
   e.preventDefault();
   let tempKey = e.key == " " ? "space" : e.key;
   keys[tempKey] = true;
-  // console.log(keys);
 }
 
 function pressOff(e) {
   e.preventDefault();
   let tempKey = e.key == " " ? "space" : e.key;
   keys[tempKey] = false;
-  // console.log(keys);
 }
