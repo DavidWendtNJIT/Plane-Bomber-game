@@ -55,7 +55,7 @@ function playBackgroundAudio() {
 function start() {
   if (!player.inplay) {
     gameArea.innerHTML = ""; // Clears the game area when restarting
-    player.level = 2;
+    player.level = 11;
     playBackgroundAudio();
     playPlaneAudio();
     makeTarget();
