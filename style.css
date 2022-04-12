@@ -8,9 +8,12 @@
   background-size: cover;
 }
 
+
 .hide {
   display: none;
+  visibility: hidden;
 }
+
 
 .gameMessage {
   position: absolute;
@@ -25,11 +28,26 @@
   font-family: 'Courier New', Courier, monospace;
 }
 
+
+.scoreboard {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  width: 40%;
+  text-align: center;
+  background-color: black;
+  color: white;
+  font-size: 7em;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+
 .gameMessage:hover {
   background-color: black;
   color: #79C9F9;
   cursor: crosshair;
 }
+
 
 .score {
   background-color: #79C9F9;
@@ -61,6 +79,8 @@
   font-size: 3em;
   font-family: 'Courier New', Courier, monospace;
 }
+
+
 .bomb {
   position: absolute;
   left: 0px;
@@ -71,13 +91,14 @@
   background-image: url(assets/fire-2.png);
   text-align: center; 
   font-size: 1.5em;
-
 }
+
 
 body,
 html {
   height: 95%;
 }
+
 
 .bg {
   background-image: url("assets/game-background.jpg");
@@ -88,12 +109,13 @@ html {
   overflow: hidden;
 }
 
+
 #background-audio {
   position: absolute;
   top: 0%;
   left: 40%;
-  visibility: hidden;
 }
+
 
 audio::-webkit-media-controls-panel {
   background-color: #79C9F9;

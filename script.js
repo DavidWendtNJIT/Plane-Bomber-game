@@ -4,6 +4,7 @@ const gameArea = document.querySelector(".gameArea");
 const gameMessage = document.querySelector(".gameMessage");
 const level = document.querySelector(".level");
 const song = document.querySelector("#background-audio");
+const scoreboard = document.querySelector(".scoreboard");
 
 // Functionality
 document.addEventListener("keydown", pressOn);
@@ -32,16 +33,36 @@ planeAudio.loop = true;
 let backgroundAudio = document.getElementById("background-audio");
 backgroundAudio.volume = 0.6;
 backgroundAudio.loop = true;
+backgroundAudio.classList.add("hide");
+
+function playAudioHit() {
+  playHit.play();
+}
+
+function playPlaneAudio() {
+  planeAudio.play();
+}
+
+function pausePlaneAudio() {
+  planeAudio.pause();
+}
+
+function playBackgroundAudio() {
+  backgroundAudio.play();
+}
 
 // Function for when the game starts and some default values
 function start() {
   if (!player.inplay) {
     gameArea.innerHTML = ""; // Clears the game area when restarting
-    player.level = 11;
+    player.level = 2;
     playBackgroundAudio();
     playPlaneAudio();
     makeTarget();
     gameMessage.classList.add("hide"); // Hides the Start Button
+    score.classList.remove("hide");
+    level.classList.remove("hide");
+    song.classList.remove("hide");
     player.inplay = true;
     player.score = 4000; // Starting Score
     player.totalBombs = 6; // total bombs allowed on screen
@@ -58,12 +79,6 @@ function start() {
     player.x = player.plane.offsetLeft;
     player.y = player.plane.offsetTop;
   }
-}
-
-function endGame() {
-  pausePlaneAudio();
-  player.inplay = false;
-  gameMessage.classList.remove("hide"); // removing the "hide" class to SHOW the start button
 }
 
 function makeTarget() {
@@ -85,7 +100,7 @@ function makeBomb() {
   if (player.ready && player.activeBomb < player.totalBombs) {
     player.score -= 200; // drops the score for every bomb
     player.activeBomb++; // numbers each bomb
-    player.bombScore++;
+    // player.bombScore++;
     let bomb = document.createElement("div"); // creates the bomb
     bomb.classList.add("bomb");
     // bomb.innerHTML = player.bombScore;
@@ -99,22 +114,6 @@ function makeBomb() {
       player.ready = true; // 0.35 seconds between bomb drops
     }, 350);
   }
-}
-
-function playAudioHit() {
-  playHit.play();
-}
-
-function playPlaneAudio() {
-  planeAudio.play();
-}
-
-function pausePlaneAudio() {
-  planeAudio.pause();
-}
-
-function playBackgroundAudio() {
-  backgroundAudio.play();
 }
 
 // Dropping the bombs
@@ -190,8 +189,20 @@ function playGame() {
     window.requestAnimationFrame(playGame); //reinitiated the animation to have it loop through the playGame function
     score.innerHTML = "Score: " + player.score;
     level.innerHTML = "Remaining Levels: " + player.level;
-    song.style.visibility = "visible";
   }
+}
+
+function endGame() {
+  pausePlaneAudio();
+  player.inplay = false;
+  gameMessage.classList.remove("hide"); // removing the "hide" class to SHOW the start button
+  gameArea.scoreboard = document.createElement("div"); // Dynamically creates the Plane once Start is clicked
+  gameArea.scoreboard.setAttribute("class", "scoreboard");
+  gameArea.appendChild(gameArea.scoreboard);
+  gameArea.scoreboard.innerHTML = "High Score = " + player.score;
+  score.classList.add("hide");
+  level.classList.add("hide");
+  song.classList.add("hide");
 }
 
 // Key Stroke Functions
