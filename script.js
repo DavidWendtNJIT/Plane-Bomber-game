@@ -199,7 +199,7 @@ function endGame() {
   gameArea.scoreboard = document.createElement("div"); // Dynamically creates the Plane once Start is clicked
   gameArea.scoreboard.setAttribute("class", "scoreboard");
   gameArea.appendChild(gameArea.scoreboard);
-  gameArea.scoreboard.innerHTML = "High Score = " + player.score;
+  gameArea.scoreboard.innerHTML = "Final Score = " + player.score;
   score.classList.add("hide");
   level.classList.add("hide");
   song.classList.add("hide");
